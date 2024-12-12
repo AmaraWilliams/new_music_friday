@@ -126,12 +126,17 @@ def create_nmf_list():
         add_date = track['added_at']
         track_id = track['track']['id']
         uri = track['track']['uri']
-        track = Track(track_id, uri, add_date)
+        artists = track['track']['artists']
+        artist_list = []
+        for artist in artists:
+            artist_list.append(artist['uri'])
+        track = Track(track_id, uri, add_date, artists)
         if within_week(add_date) == -1:
             continue
         if not within_week(add_date):
             break
         nmf_list.append(track.uri)
+        break
     return nmf_list
 
 def get_friday(date):
