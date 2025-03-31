@@ -6,6 +6,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import datetime
 from datetime import timedelta
+import time
 from Track import Track
 import logging
 
@@ -114,10 +115,9 @@ def create_nmf_playlist(nmf_list):
     if PLAYLIST_ID == None:
         print("This playlist does not exist!")
         return None
-    if nmf_list != None:
-        logging.info("replacing tracks")
-        spotify.playlist_replace_items(PLAYLIST_ID, nmf_list)
-        spotify.playlist_change_details(PLAYLIST_ID, description=description)
+
+    spotify.playlist_replace_items(PLAYLIST_ID, nmf_list)
+    spotify.playlist_change_details(PLAYLIST_ID, description=description)
     
 def create_nmf_list():
     nmf_list= []
@@ -136,13 +136,22 @@ def create_nmf_list():
         if not within_week(add_date):
             break
         nmf_list.append(track.uri)
-        break
     return nmf_list
 
-def get_friday(date):
+def get_friday():
     """Gets the date of previous Friday"""
     # Subtract the calculated number of days
-    friday = date - datetime.timedelta(days=7)
+    today = datetime.date.today()
+    weekAgo = today - datetime.timedelta(days=7)
+    weekday = 0
+    days = 0
+    while weekday != 5:
+        days += 1
+        weekday = datetime.date.isoweekday(datetime.date.today() - datetime.timedelta(days=days))
+
+
+    friday = today - datetime.timedelta(days=days)
+  
     return friday
 
 def parse_add_date(datetimeAdd):
@@ -157,21 +166,23 @@ def within_week(date):
     if num_days == 0:#added before the week started
         return False
     if num_days > 7: #added after the week ended
-        return -1
+        return -1 
     return True
 
-run(host='', port=8080)   
+#run(host='', port=8080)   
 
 print("New Music Friday made easy")
 
 
 while not quit_program:
-    description = input("What's the description?: ")
-    print("Creating your NMF...")
-    today = datetime.date.today()
-    friday_of_last_week = get_friday(today)
-    nmf_list = create_nmf_list()
-    create_nmf_playlist(nmf_list)
-    print("--Successfully created your NMF! Go jam out!--")
+    
+    print(get_friday())
+    # description = input("What's the description?: ")
+    # print("Creating your NMF...")
+    # today = datetime.date.today()
+    # friday_of_last_week = get_friday(today)
+    # nmf_list = create_nmf_list()
+    # create_nmf_playlist(nmf_list)
+    # print("--Successfully created your NMF! Go jam out!--")
     break
         
