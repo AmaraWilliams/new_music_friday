@@ -14,5 +14,5 @@ Creates a playlist maximizing the Spotify API to create a playlist containing yo
 
 **Ongoing features:**
 
-- Using the basic model or AI model, the playlist will be organized to best create a smooth listening journey.
+- Using an AI model, the playlist will be organized to best create a smooth listening journey.
 - Downloadable app or web app (haven't decided)
